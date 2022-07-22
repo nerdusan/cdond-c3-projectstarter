@@ -7,7 +7,8 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys: [frontend-build]
+        keys:
+          - frontend-build
       - run:
           name: build front-end
           command: |
@@ -15,7 +16,8 @@ jobs:
             npm install
             npm run build
       - save_cache:
-          paths: [frontend/node_modules]
+          paths: 
+            - frontend/node_modules
           key: frontend-build
 
   build-backend:
@@ -24,7 +26,8 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys: [backend-build]
+        keys: 
+          - backend-build
       - run:
           name: backend build
           command: |
@@ -32,7 +35,8 @@ jobs:
             npm install
             npm run build
       - save_cache:
-          paths: [backend/node_modules]
+          paths: 
+            - backend/node_modules
           key: backend-build
 
   test-frontend:
