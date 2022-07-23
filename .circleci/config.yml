@@ -1,13 +1,36 @@
 version: 2.1
+orbs: 
+  slack: circleci/slack@4.10.1
 
 jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Workflow is running!*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
-          keys: frontend-build
+          keys: [frontend-build]
       - run:
           name: build front-end
           command: |
@@ -25,7 +48,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: backend-build
+          keys: [backend-build]
       - run:
           name: backend build
           command: |
@@ -42,30 +65,44 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-test]
       - run:
           name: run frontend tests
           command: |
             cd frontend
             npm install
             npm run test
+      - save_cache:
+          paths: 
+            - frontend/node_modules
+          key: frontend-test
 
   test-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-test]
       - run:
           name: run backend tests
           command: |
             cd backend
             npm install
             npm run test
+      - save_cache:
+          paths:
+            - backend/node_modules
+          key: backend-test
 
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [frontend-scan]
       - run:
           name: scan frontend
           command: |
@@ -73,12 +110,18 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+      - save_cache:
+          paths: 
+            - frontend/node_modules
+          key: frontend-scan
 
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-scan]
       - run:
           name: scan backend
           command: |
@@ -87,9 +130,25 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
+      - save_cache:
+          paths:
+            - backend/node_modules
+          key: backend-scan
+
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure backend infrastructure exists
 
 workflows:
-  default:
+  send-notification:
+    jobs:
+      - notify:
+          context: slack-secrets
+  default-flow:
     jobs:
       - build-frontend
       - build-backend
