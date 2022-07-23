@@ -135,13 +135,13 @@ jobs:
             - backend/node_modules
           key: backend-scan
 
-  deploy-infrastructure:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: Ensure backend infrastructure exists
+  # deploy-infrastructure:
+  #   docker:
+  #     - image: amazon/aws-cli
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Ensure backend infrastructure exists
 
 workflows:
   send-notification:
