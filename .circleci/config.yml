@@ -146,8 +146,7 @@ jobs:
 workflows:
   send-notification:
     jobs:
-      - notify:
-          context: slack-secrets
+      - notify
   default-flow:
     jobs:
       - build-frontend
