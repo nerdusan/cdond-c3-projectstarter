@@ -171,9 +171,12 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install Ansible
+          name: Install ansible and awscli
           command: |
-              apk add --update ansible gzip awscli
+              apk add --update ansible gzip
+              sudo apt update
+              sudo apt install awscli -y
+
       - run:
           name: Run playbook and configure server
           command: |
