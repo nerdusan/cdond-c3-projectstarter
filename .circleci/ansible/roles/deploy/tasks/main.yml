@@ -1,0 +1,21 @@
+---
+  - name: extract zipped artifact into instance
+    unarchive:
+      src: ~/project/artifact.tar.gz
+      dest: /home/ubuntu
+
+  - name: install dependencies
+    become: yes
+    apt:
+      name: ["nodejs", "npm"]
+      state: latest
+
+  - name: install pm2
+    become: yes
+    npm:
+      name: pm2
+      global: yes
+
+  - name: start application
+    command:
+      cmd: pm2 start npm -- start
