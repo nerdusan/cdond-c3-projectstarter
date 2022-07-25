@@ -272,10 +272,9 @@ jobs:
           fingerprints: ["d5:21:00:f5:5d:a2:1e:94:f2:1e:92:86:89:8a:dc:57"]
       - attach_workspace:
           at: ~/
-      - install dependencies:
-          run: apk add --update openssh-client git rsync
-          run: apk add --update nodejs npm tar gzip ansible
-          run: pip install awscli 
+      - run: apk add --update openssh-client git rsync
+      - run: apk add --update nodejs npm tar gzip ansible
+      - run: pip install awscli 
       - run:
           name: deploy backend
           command: |
