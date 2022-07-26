@@ -15,7 +15,7 @@
   pre_tasks:
     - name: "wait 600 seconds for target connection to become reachable/usable."
       wait_for_connection:
-        delay: 30
+        delay: 10
         timeout: 600
       # Your code here
 
@@ -28,15 +28,15 @@
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
-    - TYPEORM_CONNECTION: "{{ lookup('env', 'postgres')}}"
-    - TYPEORM_ENTITIES: "{{ lookup('env', './src/modules/domain/**/*.entity.ts')}}"
-    - TYPEORM_HOST: "{{ lookup('env', 'project-3.cylmadiwsikd.us-east-1.rds.amazonaws.com')}}"
-    - TYPEORM_PORT: 5432
-    - TYPEORM_USERNAME: "{{ lookup('env', 'postgres')}}"
-    - TYPEORM_PASSWORD: "{{ lookup('env', 'udacitypostgres')}}"
-    - TYPEORM_DATABASE: "{{ lookup('env', 'postgres')}}"
-    - TYPEORM_MIGRATIONS: "{{ lookup('env', './src/migrations/*.ts')}}"
-    - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', './src/migrations')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
+  - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+  - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
+  - TYPEORM_PORT: 5432
+  - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
+  - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
+  - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
+  - TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
+  - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
     # Add more env vars here
 
   roles:
