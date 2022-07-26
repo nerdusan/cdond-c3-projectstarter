@@ -198,7 +198,7 @@ jobs:
           name: Run playbook and configure server
           command: |
               cd .circleci/ansible
-              ansible-playbook -i inventory.txt configure-server.yml --ssh-common-args='-o StrictHostKeyChecking=no' -vvv
+              ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -i inventory.txt configure-server.yml
       - destroy-environment
 
   run-migrations:
