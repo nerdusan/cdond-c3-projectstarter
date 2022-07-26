@@ -185,7 +185,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-              fingerprints: ["d5:21:00:f5:5d:a2:1e:94:f2:1e:92:86:89:8a:dc:57"]
+              fingerprints: ["db:03:10:82:43:51:0d:85:03:39:97:81:ee:f7:46:69"]
       - attach_workspace:
           at: ~/
       - run:
@@ -269,7 +269,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["d5:21:00:f5:5d:a2:1e:94:f2:1e:92:86:89:8a:dc:57"]
+          fingerprints: ["db:03:10:82:43:51:0d:85:03:39:97:81:ee:f7:46:69"]
       - attach_workspace:
           at: ~/
       - run: apk add --update openssh-client git rsync
@@ -309,7 +309,9 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text | xargs)
+            --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --output text )
+            echo BACKEND_IP
       - run:
           name: Backend smoke test.
           command: |
