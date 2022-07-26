@@ -188,6 +188,7 @@ jobs:
               fingerprints: ["db:03:10:82:43:51:0d:85:03:39:97:81:ee:f7:46:69"]
       - attach_workspace:
           at: ~/
+      - run: apk add --update openssh-client git
       - run:
           name: Install ansible and awscli
           command: |
@@ -197,7 +198,7 @@ jobs:
           name: Run playbook and configure server
           command: |
               cd .circleci/ansible
-              ansible-playbook -i inventory.txt configure-server.yml
+              ansible-playbook -i inventory.txt configure-server.yml --ssh-common-args='-o StrictHostKeyChecking=no' -vvv
       - destroy-environment
 
   run-migrations:
