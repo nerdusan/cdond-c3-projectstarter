@@ -199,7 +199,7 @@ jobs:
           command: |
               cd .circleci/ansible
               ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -i inventory.txt configure-server.yml
-      # - destroy-environment
+      - destroy-environment
 
   run-migrations:
     docker:
