@@ -199,7 +199,7 @@ jobs:
           command: |
               cd .circleci/ansible
               ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -i inventory.txt configure-server.yml
-      - destroy-environment
+      # - destroy-environment
 
   run-migrations:
     docker:
@@ -222,8 +222,8 @@ jobs:
             then
             curl -k  https://kvdb.io/28A2fizBtNr4aotWCDmaMx/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
 
   deploy-frontend:
     docker:
@@ -336,8 +336,8 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
   
 
 workflows:
