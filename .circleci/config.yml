@@ -203,7 +203,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:12.22
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -218,10 +218,11 @@ jobs:
       - run:
           name: Send migration results to kvdb
           command: |
-            # Your code here
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
             curl -k  https://kvdb.io/28A2fizBtNr4aotWCDmaMx/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            else
+            return 1
             fi
       # - destroy-environment
       # - revert-migrations
@@ -270,6 +271,8 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - add_ssh_keys:
           fingerprints: ["db:03:10:82:43:51:0d:85:03:39:97:81:ee:f7:46:69"]
       - attach_workspace:
@@ -287,9 +290,9 @@ jobs:
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
+            ansible-playbook -i inventory.txt deploy-backend.yml --ssh-common-args='-o StrictHostKeyChecking=no' -vvv
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml --ssh-common-args='-o StrictHostKeyChecking=no' -vvv
       - destroy-environment
       - revert-migrations  
 
