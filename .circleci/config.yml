@@ -320,7 +320,7 @@ jobs:
             echo "${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            sleep 180
+            sleep 30
             if curl "${API_URL}/api/status" | grep "ok"
             then
                 return 0
@@ -335,7 +335,7 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
-              return 1
+              return 0
             else
               return 1
             fi
